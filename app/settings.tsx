@@ -21,6 +21,32 @@ import { MissionSettings } from '../types';
 
 type FormErrors = Partial<Record<string, string>>;
 
+interface InputFieldProps {
+  label: string;
+  value: string;
+  onChangeText: (v: string) => void;
+  error?: string;
+  keyboardType?: 'default' | 'numeric' | 'decimal-pad';
+  placeholder?: string;
+}
+
+function InputField({ label, value, onChangeText, error, keyboardType = 'default', placeholder = '' }: InputFieldProps) {
+  return (
+    <View style={styles.fieldWrap}>
+      <Text style={styles.inputLabel}>{label}</Text>
+      <TextInput
+        style={[styles.input, error && styles.inputError]}
+        value={value}
+        onChangeText={onChangeText}
+        keyboardType={keyboardType}
+        placeholderTextColor={Colors.textMuted}
+        placeholder={placeholder}
+      />
+      {error ? <Text style={styles.errorText}>{error}</Text> : null}
+    </View>
+  );
+}
+
 export default function SettingsScreen() {
   const { settings, updateSettings } = useMission();
   const { user, logout } = useAuth();
@@ -63,6 +89,13 @@ export default function SettingsScreen() {
   }
 
   async function handleLogout() {
+    if (Platform.OS === 'web') {
+      if (window.confirm('Confirmar logout da missão?')) {
+        await logout();
+        router.replace('/(auth)/login');
+      }
+      return;
+    }
     RNAlert.alert('Sair', 'Confirmar logout da missão?', [
       { text: 'Cancelar', style: 'cancel' },
       {
@@ -72,31 +105,12 @@ export default function SettingsScreen() {
     ]);
   }
 
-  const InputField = ({ label, value, onChangeText, error, keyboardType = 'default', placeholder = '' }: {
-    label: string; value: string; onChangeText: (v: string) => void;
-    error?: string; keyboardType?: 'default' | 'numeric' | 'decimal-pad'; placeholder?: string;
-  }) => (
-    <View style={styles.fieldWrap}>
-      <Text style={styles.inputLabel}>{label}</Text>
-      <TextInput
-        style={[styles.input, error && styles.inputError]}
-        value={value}
-        onChangeText={onChangeText}
-        keyboardType={keyboardType}
-        placeholderTextColor={Colors.textMuted}
-        placeholder={placeholder}
-      />
-      {error ? <Text style={styles.errorText}>{error}</Text> : null}
-    </View>
-  );
-
   return (
     <View style={styles.screen}>
       <Header title="Configurações" showBack />
       <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
         <ScrollView contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled">
 
-          {/* Missão */}
           <Text style={styles.sectionTitle}>Missão</Text>
           <View style={styles.card}>
             <InputField
@@ -117,15 +131,14 @@ export default function SettingsScreen() {
             <View style={styles.switchRow}>
               <Text style={styles.switchLabel}>Notificações Push</Text>
               <Switch
-                value={form.notificationsEnabled}
+                value={Boolean(form.notificationsEnabled)}
                 onValueChange={(v) => setField('notificationsEnabled', v)}
-                trackColor={{ true: Colors.primary }}
+                trackColor={{ false: Colors.border, true: Colors.primary }}
                 thumbColor={Colors.textPrimary}
               />
             </View>
           </View>
 
-          {/* Limiares */}
           <Text style={styles.sectionTitle}>Limiares de Alerta</Text>
           <View style={styles.card}>
             <InputField label="Temperatura Máxima (°C)" value={String(form.thresholds.temperatureMax)}
@@ -142,14 +155,13 @@ export default function SettingsScreen() {
               onChangeText={(v) => setThreshold('rulMin', v)} error={errors.rulMin} keyboardType="numeric" />
           </View>
 
-          {/* Usuário */}
           <Text style={styles.sectionTitle}>Astronauta</Text>
           <View style={styles.card}>
             <View style={styles.userRow}>
               <Ionicons name="person-circle" size={40} color={Colors.primary} />
               <View>
                 <Text style={styles.userName}>{user?.name}</Text>
-                <Text style={styles.userEmail}>{user?.email} | {user?.rm}</Text>
+                <Text style={styles.userEmail}>{user?.email}</Text>
               </View>
             </View>
           </View>

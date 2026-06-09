@@ -33,7 +33,6 @@ export default function HomeScreen() {
           <Ionicons name="person-circle" size={36} color={Colors.primary} />
           <View>
             <Text style={styles.welcomeText}>Bem-vindo, {user?.name.split(' ')[0]}</Text>
-            <Text style={styles.welcomeSub}>RM: {user?.rm}</Text>
           </View>
         </View>
 

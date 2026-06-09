@@ -1,6 +1,7 @@
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { AuthProvider } from '../context/AuthContext';
 import { MissionProvider } from '../context/MissionContext';
 import { AlertProvider } from '../context/AlertContext';
@@ -8,6 +9,7 @@ import { Colors } from '../constants/colors';
 
 export default function RootLayout() {
   return (
+    <SafeAreaProvider>
     <AuthProvider>
       <MissionProvider>
         <AlertProvider>
@@ -20,5 +22,6 @@ export default function RootLayout() {
         </AlertProvider>
       </MissionProvider>
     </AuthProvider>
+    </SafeAreaProvider>
   );
 }

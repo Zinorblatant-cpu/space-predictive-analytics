@@ -12,7 +12,7 @@ interface AuthContextValue {
   user: User | null;
   isLoading: boolean;
   login: (email: string, password: string) => Promise<{ success: boolean; error?: string }>;
-  register: (data: Omit<User, 'id' | 'createdAt' | 'passwordHash'> & { password: string }) => Promise<{ success: boolean; error?: string }>;
+  register: (data: Omit<User, 'id' | 'createdAt' | 'passwordHash' | 'rm'> & { password: string }) => Promise<{ success: boolean; error?: string }>;
   logout: () => Promise<void>;
 }
 
@@ -46,7 +46,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   }, []);
 
-  const register = useCallback(async ({ name, email, rm, password }: Omit<User, 'id' | 'createdAt' | 'passwordHash'> & { password: string }) => {
+  const register = useCallback(async ({ name, email, password }: Omit<User, 'id' | 'createdAt' | 'passwordHash' | 'rm'> & { password: string }) => {
     setIsLoading(true);
     try {
       const existing = await getUser(email.toLowerCase());
@@ -55,7 +55,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         id: Date.now().toString(),
         name: name.trim(),
         email: email.toLowerCase().trim(),
-        rm: rm.trim(),
         passwordHash: btoa(password),
         createdAt: new Date().toISOString(),
       };

@@ -2,6 +2,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import React from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Colors } from '../../constants/colors';
 
 interface Props {
@@ -13,8 +14,9 @@ interface Props {
 
 export default function Header({ title, subtitle, showSettings, showBack }: Props) {
   const router = useRouter();
+  const { top } = useSafeAreaInsets();
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { paddingTop: top + 12 }]}>
       <View style={styles.left}>
         {showBack && (
           <Pressable onPress={() => router.back()} style={styles.iconBtn}>
@@ -41,7 +43,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: 16,
-    paddingVertical: 12,
+    paddingBottom: 12,
     backgroundColor: Colors.background,
     borderBottomWidth: 1,
     borderBottomColor: Colors.border,

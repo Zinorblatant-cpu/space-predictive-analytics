@@ -18,18 +18,56 @@ import { useAuth } from '../../context/AuthContext';
 interface Fields {
   name: string;
   email: string;
-  rm: string;
   password: string;
   confirm: string;
 }
 
 type Errors = Partial<Record<keyof Fields | 'general', string>>;
 
+interface FieldProps {
+  label: string;
+  fkey: keyof Fields;
+  placeholder: string;
+  keyboardType?: 'default' | 'email-address';
+  secure?: boolean;
+  value: string;
+  onChangeText: (val: string) => void;
+  error?: string;
+  showPass: boolean;
+  onTogglePass: () => void;
+}
+
+function Field({ label, fkey, placeholder, keyboardType = 'default', secure = false, value, onChangeText, error, showPass, onTogglePass }: FieldProps) {
+  return (
+    <>
+      <Text style={styles.inputLabel}>{label}</Text>
+      <View style={[styles.passRow, error && styles.inputError]}>
+        <TextInput
+          style={styles.passInput}
+          value={value}
+          onChangeText={onChangeText}
+          placeholder={placeholder}
+          placeholderTextColor={Colors.textMuted}
+          keyboardType={keyboardType}
+          autoCapitalize="none"
+          secureTextEntry={secure && !showPass}
+        />
+        {(fkey === 'password' || fkey === 'confirm') && (
+          <Pressable onPress={onTogglePass} style={styles.eyeBtn}>
+            <Ionicons name={showPass ? 'eye-off' : 'eye'} size={20} color={Colors.textSecondary} />
+          </Pressable>
+        )}
+      </View>
+      {error ? <Text style={styles.errorText}>{error}</Text> : null}
+    </>
+  );
+}
+
 export default function RegisterScreen() {
   const { register, isLoading } = useAuth();
   const router = useRouter();
 
-  const [fields, setFields] = useState<Fields>({ name: '', email: '', rm: '', password: '', confirm: '' });
+  const [fields, setFields] = useState<Fields>({ name: '', email: '', password: '', confirm: '' });
   const [showPass, setShowPass] = useState(false);
   const [errors, setErrors] = useState<Errors>({});
 
@@ -43,9 +81,7 @@ export default function RegisterScreen() {
     else if (fields.name.trim().split(' ').length < 2) e.name = 'Informe nome e sobrenome.';
     if (!fields.email.trim()) e.email = 'E-mail obrigatório.';
     else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(fields.email)) e.email = 'E-mail inválido.';
-    if (!fields.rm.trim()) e.rm = 'RM obrigatório.';
-    else if (!/^RM\d{6}$/i.test(fields.rm.trim())) e.rm = 'Formato esperado: RM123456';
-    if (!fields.password) e.password = 'Senha obrigatória.';
+if (!fields.password) e.password = 'Senha obrigatória.';
     else if (fields.password.length < 6) e.password = 'Mínimo 6 caracteres.';
     if (fields.confirm !== fields.password) e.confirm = 'Senhas não coincidem.';
     setErrors(e);
@@ -54,37 +90,10 @@ export default function RegisterScreen() {
 
   async function handleRegister() {
     if (!validate()) return;
-    const result = await register({ name: fields.name, email: fields.email, rm: fields.rm, password: fields.password });
+    const result = await register({ name: fields.name, email: fields.email, password: fields.password });
     if (!result.success) setErrors({ general: result.error });
     else router.replace('/(tabs)');
   }
-
-  const Field = ({ label, fkey, placeholder, keyboardType = 'default', secure = false }: {
-    label: string; fkey: keyof Fields; placeholder: string;
-    keyboardType?: 'default' | 'email-address'; secure?: boolean;
-  }) => (
-    <>
-      <Text style={styles.inputLabel}>{label}</Text>
-      <View style={[styles.passRow, errors[fkey] && styles.inputError]}>
-        <TextInput
-          style={styles.passInput}
-          value={fields[fkey]}
-          onChangeText={set(fkey)}
-          placeholder={placeholder}
-          placeholderTextColor={Colors.textMuted}
-          keyboardType={keyboardType}
-          autoCapitalize="none"
-          secureTextEntry={secure && !showPass}
-        />
-        {(fkey === 'password' || fkey === 'confirm') && (
-          <Pressable onPress={() => setShowPass((v) => !v)} style={styles.eyeBtn}>
-            <Ionicons name={showPass ? 'eye-off' : 'eye'} size={20} color={Colors.textSecondary} />
-          </Pressable>
-        )}
-      </View>
-      {errors[fkey] ? <Text style={styles.errorText}>{errors[fkey]}</Text> : null}
-    </>
-  );
 
   return (
     <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
@@ -98,11 +107,10 @@ export default function RegisterScreen() {
 
         <View style={styles.form}>
           {errors.general ? <Text style={styles.errorBox}>{errors.general}</Text> : null}
-          <Field label="Nome Completo" fkey="name" placeholder="João Silva" />
-          <Field label="E-mail" fkey="email" placeholder="joao@fiap.com.br" keyboardType="email-address" />
-          <Field label="RM (ex: RM123456)" fkey="rm" placeholder="RM123456" />
-          <Field label="Senha" fkey="password" placeholder="••••••••" secure />
-          <Field label="Confirmar Senha" fkey="confirm" placeholder="••••••••" secure />
+          <Field label="Nome Completo" fkey="name" placeholder="João Silva" value={fields.name} onChangeText={set('name')} error={errors.name} showPass={showPass} onTogglePass={() => setShowPass((v) => !v)} />
+          <Field label="E-mail" fkey="email" placeholder="joao@fiap.com.br" keyboardType="email-address" value={fields.email} onChangeText={set('email')} error={errors.email} showPass={showPass} onTogglePass={() => setShowPass((v) => !v)} />
+<Field label="Senha" fkey="password" placeholder="••••••••" secure value={fields.password} onChangeText={set('password')} error={errors.password} showPass={showPass} onTogglePass={() => setShowPass((v) => !v)} />
+          <Field label="Confirmar Senha" fkey="confirm" placeholder="••••••••" secure value={fields.confirm} onChangeText={set('confirm')} error={errors.confirm} showPass={showPass} onTogglePass={() => setShowPass((v) => !v)} />
 
           <Pressable style={styles.btn} onPress={handleRegister} disabled={isLoading}>
             {isLoading
