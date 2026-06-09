@@ -23,41 +23,45 @@
 | Nome | RM |
 |------|----|
 | Leonardo Lopes Oliveira | RM000000 |
+| Felipe Krzyzanovski dos Santos Menezes | RM564878 |
+| Lucas Ferrari Lima | RM 563119|
+
 
 ---
 
 ## Telas do Aplicativo
 
 ### Login — Acesso à Missão
-![Login](./assets/screenshots/login.png)
+![Login](<./img/WhatsApp Image 2026-06-09 at 3.04.52 PM.jpeg>)
 Tela de autenticação com validação de e-mail e senha, persistência via AsyncStorage.
 
 ### Cadastro — Novo Astronauta
-![Cadastro](./assets/screenshots/register.png)
-Formulário completo com validação de nome, e-mail, RM e senha com confirmação.
+![Cadastro](<./img/WhatsApp Image 2026-06-09 at 3.04.51 PM.jpeg>)
+Formulário com validação de nome, e-mail e senha com confirmação.
 
 ### Home — Dashboard Principal
-![Home](./assets/screenshots/home.png)
-Animação 3D da Terra com 3 satélites em órbita, status geral da missão, posição ao vivo da ISS e cards de visão geral.
+![Home](<./img/WhatsApp Image 2026-06-09 at 3.29.44 PM.jpeg>)
+Status geral da missão, posição ao vivo da ISS e cards de visão geral dos sistemas.
 
 ### Dashboard de Sensores
-![Sensores](./assets/screenshots/sensors.png)
+![Sensores](<./img/WhatsApp Image 2026-06-09 at 3.29.44 PM(1).jpeg>)
 Gráficos de linha em tempo real simulado com histórico de temperatura, pressão, vibração e umidade derivados do dataset C-MAPSS.
 
 ### Dashboard de Energia
-![Energia](./assets/screenshots/energy.png)
+![Energia](<./img/WhatsApp Image 2026-06-09 at 3.29.44 PM(2).jpeg>)
 Indicadores gauge de bateria, saída solar e eficiência. Histórico de consumo e saúde orbital (RUL).
 
 ### Dashboard de Comunicação
-![Comunicação](./assets/screenshots/communication.png)
+![Comunicação](<./img/WhatsApp Image 2026-06-09 at 3.29.45 PM(1).jpeg>)
 Status do link de telemetria, latência e qualidade do sinal. Posição ao vivo da ISS via Open Notify API.
 
 ### Alertas
-![Alertas](./assets/screenshots/alerts.png)
+![Alertas](<./img/WhatsApp Image 2026-06-09 at 3.29.45 PM(2).jpeg>)
 Lista de alertas ativos gerados automaticamente com filtro por severidade (crítico / atenção), counters e acknowledge.
 
-### Configurações / Formulário
-![Config](./assets/screenshots/settings.png)
+### Configurações
+![Configurações 1](<./img/WhatsApp Image 2026-06-09 at 3.29.44 PM(3).jpeg>)
+![Configurações 2](<./img/WhatsApp Image 2026-06-09 at 3.29.45 PM.jpeg>)
 Formulário de configuração com validação completa: nome da missão, intervalo de atualização, notificações e limiares de alerta ajustáveis por tipo.
 
 ---
@@ -112,7 +116,7 @@ Formulário de configuração com validação completa: nome da missão, interva
 
 ```bash
 # Clone o repositório
-git clone https://github.com/seu-usuario/space-predictive-analytics.git
+git clone https://github.com/Zinorblatant-cpu/space-predictive-analytics
 
 # Acesse a pasta do projeto
 cd space-predictive-analytics
@@ -195,7 +199,7 @@ Os dados simulados são derivados do **C-MAPSS NASA FD001** (Commercial Modular 
 
 ## Vídeo de Demonstração
 
-[Clique aqui para assistir à demonstração](https://youtube.com/...)
+[Clique aqui para assistir à demonstração](https://youtube.com/shorts/7sBYi53GMIY?feature=share)
 
 ---
 
@@ -205,4 +209,3 @@ Este projeto foi desenvolvido para fins acadêmicos — FIAP 2026.
 
 ---
 
-*"O único modo de aprender programação é programando."* — Todo desenvolvedor, sempre
