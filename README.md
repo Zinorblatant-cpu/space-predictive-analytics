@@ -22,7 +22,7 @@
 
 | Nome | RM |
 |------|----|
-| Leonardo Lopes Oliveira | RM000000 |
+| Leonardo Lopes Oliveira | RM565437 |
 | Felipe Krzyzanovski dos Santos Menezes | RM564878 |
 | Lucas Ferrari Lima | RM 563119|
 
